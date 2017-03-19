@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<!--<include file="$(find rtabmap_ros)/launch/rtabmap.launch">-->
+	<include file="$(find nav_bgu)/launch/rtabmap/rtabmap.launch">
+<!--		<arg name="database_path" value="~/catkin_ws/src/nav_bgu/map/3D/rtabmap.db" />		-->
+		<arg name="rgb_topic"           value="/kinect2/qhd/image_color_rect" />
+		<arg name="depth_topic"         value="/kinect2/qhd/image_depth_rect" />
+		<arg name="camera_info_topic"   value="/kinect2/qhd/camera_info" />
+		<arg name="frame_id"		value="base_link" />
+		<arg name="rviz"		value="true" />
+		<arg name="rtabmapviz" 		value="false" />
+		<arg name="localization"	value="true" />
+
+	</include>
+
+</launch>

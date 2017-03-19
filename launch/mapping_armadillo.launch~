@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+     <include file="$(find nav_bgu)/launch/armadillo.launch">
+
+         <arg name="have_map_file" value="false"/>
+       
+
+         <arg name="lidar" value="true"/>
+         <arg name="move_base" value="true"/> 
+         <arg name="kinect2" value="true"/>
+         <arg name="gmapping" value="true"/>
+         <arg name="joystick" value="true"/>
+	 <arg name="moveit" value="false"/>
+     </include>
+
+     <node pkg="rviz" name="rviz" type="rviz" />
+
+</launch>
