@@ -7,12 +7,13 @@
          <arg name="have_map_file" value="false"/>
        
 
-         <arg name="lidar" value="true"/>
-         <arg name="move_base" value="true"/> 
-         <arg name="kinect2" value="true"/>
+         <arg name="lidar" value="false"/>
+         <arg name="move_base" value="false"/> 
+         <arg name="kinect2" value="false"/>
          <arg name="gmapping" value="true"/>
          <arg name="joystick" value="true"/>
 	 <arg name="moveit" value="false"/>
+	<arg name="joystick_dev" default='/dev/input/js0'/>
      </include>
 
      <node pkg="rviz" name="rviz" type="rviz" />

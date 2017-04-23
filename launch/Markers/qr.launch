@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+     <include file="$(find nav_bgu)/launch/armadillo.launch">
+
+         <arg name="have_map_file" value="true"/>
+         <arg name="map_file" value="$(find nav_bgu)/maps/temp/second_floor_final_edited.yaml"/>
+
+         <arg name="lidar" value="true"/>
+         <arg name="move_base" value="true"/> 
+         <arg name="kinect2" value="true"/>
+         <arg name="amcl" value="true"/> 
+         <arg name="joystick" value="true"/>
+	 <arg name="moveit" value="true" />
+     </include>
+
+     
+
+<!-- Launch the viewer 
+<node pkg="visp_tracker" type="visp_tracker_viewer" name="tracker_mbt_viewer" output="screen">
+	<param name="camera_prefix" value="/kinect2" />
+	<param name="frame_size" value="0.1" />
+	<remap from="/camera/image_rect" to="/kinect2/qhd/image_color"/>
+	<remap from="/object_position_covariance" to="/visp_auto_tracker/object_position"/>
+</node>-->
+
+    
+</launch>

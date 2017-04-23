@@ -1,0 +1,47 @@
+# Markers
+
+position_1:
+    position:
+	x: 0
+	y: 0
+	z: 0
+    orientation:
+	x: 0
+	y: 0 
+	z: 0
+	w: 0
+
+position_2:
+    position:
+	x: 1
+	y: 1
+	z: 1
+    orientation:
+	x: 1
+	y: 1
+	z: 1
+	w: 1
+
+position_3:
+    position:
+	x: 2
+	y: 2
+	z: 2
+    orientation:
+	x: 2
+	y: 2
+	z: 2
+	w: 2
+
+position_4:
+    position:
+	x: 3
+	y: 3
+	z: 3
+    orientation:
+	x: 3
+	y: 3
+	z: 3
+	w: 3
+    
+    

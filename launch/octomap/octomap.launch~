@@ -15,7 +15,6 @@
 		 <arg name="kinect2" value="true"/>
 		 <arg name="joystick" value="true"/>
 		 <arg name="moveit" value="true"/>
-		 <arg name="gmapping" value="true"/>
 
 	</include>
 

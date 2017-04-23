@@ -1,0 +1,4 @@
+#  This message repressent a bar code data with a time stamp
+
+Header header
+string data

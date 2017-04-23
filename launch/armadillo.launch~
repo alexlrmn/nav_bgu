@@ -226,10 +226,10 @@
 	<group if="$(arg move_base)">
 		<rosparam file="$(find nav_bgu)/navigation/config/move_base_params.yaml" command="load" ns="move_base"/>
 		<rosparam file="$(find nav_bgu)/navigation/config/costmap_common_params.yaml" command="load" ns="move_base/global_costmap" />
-		<rosparam file="$(find nav_bgu)navigation/config/costmap_common_params.yaml" command="load" ns="move_base/local_costmap" />
+		<rosparam file="$(find nav_bgu)/navigation/config/costmap_common_params.yaml" command="load" ns="move_base/local_costmap" />
 		<rosparam file="$(find nav_bgu)/navigation/config/local_costmap_params.yaml" command="load" ns="move_base/local_costmap" />
 		<rosparam file="$(find nav_bgu)/navigation/config/global_costmap_params.yaml" command="load" ns="move_base/global_costmap"/>
-		<include file="$(find robotican_common)/launch/move_base.launch">
+		<include  file="$(find nav_bgu)/launch/move_base.launch">
 		 </include>
 	</group>
 

@@ -9,13 +9,6 @@
 	<arg name="kinect2" value="true"/>
 	<arg name="joystick" value="true"/>
 	<arg name="moveit" value="false"/>
-	<!--<arg name="imu" value="true"/>-->
     </include>
 
-    <!--<include file="$(find robotican_common)/launch/rgbd_mapping.launch">
-	<arg name="rtabmapviz" value="false"/>
-	<arg name="rviz" value="true"/>
-	<arg name="odom_topic" value="/mobile_base_controller/odom" />
-    </include>
--->
 </launch>
