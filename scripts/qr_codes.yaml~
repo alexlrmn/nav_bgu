@@ -19,7 +19,7 @@ position_2:
     orientation:
         x: 0
         y: 0
-        z: 0.92254643715	
+        z: 0.92254643715
         w: 0.3858860859
 
 position_3:
@@ -43,5 +43,14 @@ position_4:
         y: 0
         z: 0
         w: 1
-    
-    
+
+www.irisa.fr/lagadic/visp:
+    position:
+        x: 3
+        y: 3
+        z: 0
+    orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1

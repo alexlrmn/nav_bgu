@@ -13,7 +13,6 @@
          <arg name="amcl" value="true"/> 
 	 <!--<arg name="robot_localization" value="true" />-->
          <arg name="joystick" value="true"/>
-	 <arg name="urf" value="true" />
 	     	
 	<arg name="moveit" value="true" />
      </include>

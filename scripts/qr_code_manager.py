@@ -10,6 +10,7 @@ import numpy as np
 import tf
 from tf.transformations import quaternion_from_matrix, \
     translation_from_matrix, quaternion_from_matrix
+import rospkg
 
 
 import pprint
@@ -40,15 +41,26 @@ class qr_code_manager:
         self.tr = tf.TransformerROS()
         self.tl = tf.TransformListener()
 
+
+
+        self.d = {}
+
     def stamp_string_callback(self, data):
 
         if data.data != '':
+
+            code = data.data
+
+            if (code == 'http://www.irisa.fr/lagadic/visp'):
+                code = code.split(":")[1][2:]
+
+
             h = Header()
             h.stamp = Time.now()
 
             self.code_stamped = StringStamped()
             self.code_stamped.header = h
-            self.code_stamped.data = data.data
+            self.code_stamped.data = code
 
             self.execute()
 
@@ -65,20 +77,46 @@ class qr_code_manager:
     def tf_localization(self, code, position):
         # Get position of observed marker
 
+        if code not in self.d:
+
+            p = position.pose.pose
+            self.d[code] = {}
+            self.d[code]['position'] = {}
+            self.d[code]['orientation'] = {}
+            """self.d[code]['position']['x'] = {}
+            self.d[code]['position']['y'] = {}
+            self.d[code]['position']['z'] = {}
+            self.d[code]['orientation']['x'] = {}
+            self.d[code]['orientation']['y'] = {}
+            self.d[code]['orientation']['z'] = {}
+            self.d[code]['orientation']['w'] = {}"""
+
+            self.d[code]['position']['x'] = p.position.x
+            self.d[code]['position']['y'] = p.position.y
+            self.d[code]['position']['z'] = p.position.z
+            self.d[code]['orientation']['x'] = p.orientation.x
+            self.d[code]['orientation']['y'] = p.orientation.y
+            self.d[code]['orientation']['z'] = p.orientation.z
+            self.d[code]['orientation']['w'] = p.orientation.w
+
         pose = position.pose.pose
         object_matrix = np.matrix(self.tr.fromTranslationRotation
                                   ((pose.position.x, pose.position.y, pose.position.z),
                                    (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)))
 
         # Retrieve base link position
+        """
         try:
+            self.tl.waitForTransform(self.baseLinkFrameId, 'kinect2_link', rospy.Time(0))
             t = self.tl.lookupTransform(self.baseLinkFrameId, 'kinect2_link',
-                                   rospy.Time(0))
+                                             rospy.Time(0))
         except:
             rospy.logwarn("failed to retrieve camera position w.r.t. base_link")
             return
+        """
 
-        blMc = np.matrix(self.tr.fromTranslationRotation(t[0], t[1]))
+        #blMc = np.matrix(self.tr.fromTranslationRotation(t[0], t[1]))
+        blMc = np.matrix(self.tr.fromTranslationRotation((0, 0, 1), (0, 0, 0, 1)))
 
         # Create matrix from known position of the object
         wMo = np.matrix(np.identity(4))
@@ -100,27 +138,56 @@ class qr_code_manager:
         blMw_t = translation_from_matrix(blMw)
         blMw_q = quaternion_from_matrix(blMw)
 
+        #print blMw_t
+        #print blMw_q
+
+        """
         br = tf.TransformBroadcaster()
 
         br.sendTransform(blMw_t, blMw_q,
                          position.header.stamp,
                          self.baseLinkFrameId,
                          self.mapFrameId)
+        """
+
+        pos = PoseWithCovarianceStamped()
+        pos.header.stamp = rospy.Time(0)
+        pos.pose.covariance = position.pose.covariance
+
+        pos.pose.pose.position.x = blMw_t[0]
+        pos.pose.pose.position.y = blMw_t[1]
+        pos.pose.pose.position.z = blMw_t[2]
+
+        pos.pose.pose.orientation.x = blMw_q[0]
+        pos.pose.pose.orientation.y = blMw_q[1]
+        pos.pose.pose.orientation.z = blMw_q[2]
+        pos.pose.pose.orientation.w = blMw_q[3]
+
+        self.pub.publish(pos)
+
+        rospy.sleep(3)
+        """
         print '1'
         pprint.pprint(blMw_t, indent=2)
         print '2'
         pprint.pprint(blMw_q, indent=2)
-
+        """
 
 
     def init_markers(self):
 
-        with open("qr_codes.yaml") as f:
+        rospack = rospkg.RosPack()
+
+        with open(rospack.get_path("nav_bgu") + "/scripts/qr_codes.yaml") as f:
             self.markers = yaml.safe_load(f)
 
 
             # print self.markers['position_2']['orientation']['x']
 
+    def exitf(self):
+        rospack = rospkg.RosPack()
+        with open(rospack.get_path("nav_bgu") + "/scripts/read_qr.yaml", 'wr') as f:
+            yaml.safe_dump(self.d, f, default_flow_style=False)
 
 def main():
     qr = qr_code_manager()
@@ -128,7 +195,11 @@ def main():
     try:
         spin()
     except KeyboardInterrupt:
+
         print 'Shutting down'
+
+    print 'bye'
+    qr.exitf()
 
 
 if __name__ == "__main__":

@@ -10,20 +10,20 @@
          <arg name="lidar" value="true"/>
          <arg name="move_base" value="true"/> 
          <arg name="kinect2" value="true"/>
-         <arg name="amcl" value="true"/> 
+         <arg name="amcl" value="false"/> 
          <arg name="joystick" value="true"/>
-	 <arg name="moveit" value="false" />
+	 <arg name="moveit" value="true" />
      </include>
 
-     
-
-<!-- Launch the viewer 
-<node pkg="visp_tracker" type="visp_tracker_viewer" name="tracker_mbt_viewer" output="screen">
-	<param name="camera_prefix" value="/kinect2" />
-	<param name="frame_size" value="0.1" />
-	<remap from="/camera/image_rect" to="/kinect2/qhd/image_color"/>
-	<remap from="/object_position_covariance" to="/visp_auto_tracker/object_position"/>
-</node>-->
+     <node pkg="visp_auto_tracker" type="visp_auto_tracker" name="visp_auto_tracker" output="screen">
+	    <param name="model_path" value="$(find visp_auto_tracker)/models" />
+	    <param name="model_name" value="pattern" />
+	    <param name="debug_display" value="false" />
+	    <!-- param name="code_message" value="Ver1" / -->
+	    
+	    <remap from="/visp_auto_tracker/camera_info" to="/kinect2/qhd/camera_info"/>
+	    <remap from="/visp_auto_tracker/image_raw" to="/kinect2/qhd/image_color_rect"/>
+      </node>
 
     
 </launch>
