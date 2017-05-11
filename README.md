@@ -49,7 +49,7 @@ An sample of launch files for rtabmap localization and mapping can be found at t
 > rtabmap.launch
 > rtabmap_mapping.launch
 > rtabmap_nav.launch
-tand alone tand alone 
+
 The file rtabmap.launch is an example of all the configuration that are required to launch the nodes (camera topics, scan topic, etc.) . The mapping and navigation files just call the rtabmap.launch file with different modes: localization/mapping which are determined by a parameter. It is important to remember that while running rtabmap in mapping mode, a database is created and saved is the same directory as specified by the parameter "database path", if a database already exists in the folder specified, rtabmap will override it.  The default path is:
 >  ~/.ros/rtabmap.db
 
