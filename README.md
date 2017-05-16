@@ -93,7 +93,7 @@ The command will open a window with the available nodes and parameters that can 
 
 * Changing parameters through the code. [Python example]
 
-* Changing parameters in the configuration files - Changing inflation radius and local planner require changing the configuration files, to avoid changing the original files or the location in the armadillo.launch a copy of the original files can be made, modified and loaded. For example, the move_base_config.yaml with the different local planner that was mentioned earlier can be loaded by adding the following line to your lunch file:
+* Changing parameters in the configuration files - Changing inflation radius and local planner requires changing the configuration files, to avoid changing the original files or the location in the armadillo.launch a copy of the original files can be made, modified and loaded. For example, the move_base_config.yaml with the different local planner that was mentioned earlier can be loaded by adding the following line to your lunch file:
 	```
 	<rosparam file="$(find nav_bgu)/navigation/config/move_base_params.yaml" command="load" ns="move_base"/>
 	```
