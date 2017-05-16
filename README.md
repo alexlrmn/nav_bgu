@@ -2,14 +2,17 @@
 
 Table of contents
 =================
+* [Packages](#packages)
+ * [Gmapping](#gmapping)
+     * [Editing a map](#editing-a-map)
+ * [Rtabmap](#rtabmap)
+     * [Nodes](#nodes)
+     * [Viewing the databases](#viewing-the-databases)
+ * [Octopmap](#octomap)
+* [Configurations](#configurations)
+  * [Dynamic parameter reconfigure](#dynamic-parameter-reconfigure)
 
-* [Gmapping](#gmapping)
-  * [Editing a map](#editing-a-map)
-* [Rtabmap](#rtabmap)
-  * [Nodes](#nodes)
-  * [Viewing the databases](#viewing-the-databases)
-* [Octopmap](#octomap)
-
+## Packages
 ### [Gmapping]
 
 The Gmapping package is the basic and most maintained package for creating a 2D map. It uses the LaserScan message that the Lidar laser is publishing and the information about the Odometry the come from the wheel encoders to create a map of the environment.
@@ -69,8 +72,44 @@ A sample launch file can be found at the launch/octomap folder under the name:
 
 It seems that while mapping octomap uses only the point cloud to maintain the robots location so it could have high error rate. Not suggested to use a standalone for mapping. Rtabmap is also using octomap.
 
+## Configurations
+
+Changing configurations of parameter in the navigation stack may improve navigation accuracy. Some parameters to look at:
+
+* Inflation_radius + cost_scaling_factor - Parameters which determine how far from obstacles the robot should stay. These parameters also effect the planners and can improve the driving routes. The parameters can be changed dynamically for different purposes, for example good driving in open areas can be accomplished be using higher inflation radius, but driving in narrow path ways like doors should be done with low inflation value. The dynamic parameter change is easy and will be explained in a moment.
+* Planners - The planners calculate an optimal route for the robot given a goal point. There are two types of planners: a global planner calculates the whole route from the robot current position to the goal point avoiding known obstacles on the map and a local planner which calculates the route in a small window around the robot, taking into consideration dynamic obstacles. Changing those planners way help the navigation, for example, the current local planner "dwa_local_planner" doesn't handle well dynamic obstacles and result in a failed plan to overcome it a different local planner way be used, from experience the [teb_local_planner] gives a better results in that area. An example of how to change the planner can be found in the nav_bgu package in the folder navigation/config under the name of move_base_params.yaml.
+In addition the parameter "base_local_planner" in the move_base node should be changed to the name of the new planner.
+
+More ideas of parameter tuning can be found in [this article]. An important point to look at are ideas on how to recover when the robot fails to calculate a plan in some areas, it is discussed in part 6 of the article.
+
+### Dynamic parameter reconfigure
+Ros is providing packages for that purpose. In some cases we would want to test different parameters without turning off the running launch file  or nodes and just change some parameters. it can be achieved in a couple of different ways:
+
+* Using rqt - Open a new terminal and insert the following command:
+	```
+	rosrun rqt_reconfigure rqt_reconfigure
+	```
+The command will open a window with the available nodes and parameters that can be modified.
+
+* Changing parameters through the code. [Python example]
+
+* Changing parameters in the configuration files - Changing inflation radius and local planner require changing the configuration files, to avoid changing the original files or the location in the armadillo.launch a copy of the original files can be made, modified and loaded. For example, the move_base_config.yaml with the different local planner that was mentioned earlier can be loaded by adding the following line to your lunch file:
+	```
+	<rosparam file="$(find nav_bgu)/navigation/config/move_base_params.yaml" command="load" ns="move_base"/>
+	```
+	In addition, it is required to change the local planner parameter in the move_base node. It can be achieved by adding the following line to the lunch file:
+	```
+	<node name="$(anon dynparam)" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters move_base"> 
+	<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    </node>
+	```
+	
+
+
 
 [Gmapping]: <http://wiki.ros.org/gmapping>
 [Rtabmap]: <https://introlab.github.io/rtabmap/>
 [Octomap]: <http://wiki.ros.org/octomap>
-
+[teb_local_planner]: <http://wiki.ros.org/teb_local_planner>
+[this article]:<http://zkytony.com/documents/navguide.pdf>
+[Python example]:<http://wiki.ros.org/rospy/Overview/Parameter%20Server>
